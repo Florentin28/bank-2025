@@ -20,8 +20,8 @@ class CurrentAccount(string number, double balance, double creditLine, Person ow
     {
         Balance += amount;
     }
-    public double GetBalance()
+    public void GetBalance()
     {
-        return Balance;
+        Console.WriteLine($"Compte : {Number} | Solde : {Balance}€");
     }
 }

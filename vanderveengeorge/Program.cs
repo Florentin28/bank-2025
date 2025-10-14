@@ -16,5 +16,6 @@ class Program
         bnp.AddAccount(compte2);
         bnp.DeleteAccount("BE1234-4323-4323-345");
         Console.WriteLine(bnp.Accounts.Count());
+        bnp.GetAccountsInfos(person1);
     }
 }
