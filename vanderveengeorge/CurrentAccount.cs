@@ -14,6 +14,6 @@ class CurrentAccount(string number, double balance, double creditLine, Person ow
     }
     protected override double CalculateInterest()
     {
-        return Balance * Balance >= 0 ? 1.035 : 1.0975;
+        return Balance * Balance >= 0 ? 0.035 : 0.0975;
     }
 }

@@ -12,4 +12,8 @@ abstract class Account(string number, double balance, Person owner)
         Balance -= amount;
     }
     protected abstract double CalculateInterest();
+    public virtual void ApplyInterest()
+    {
+        Balance += CalculateInterest();
+    }
 }

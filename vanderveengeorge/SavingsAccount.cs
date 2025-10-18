@@ -8,6 +8,6 @@ class SavingsAccount(string number, double balance, DateTime dateLastWithdraw, P
     }
     protected override double CalculateInterest()
     {
-        return Balance * 1.045;
+        return Balance * 0.045;
     }
 }
