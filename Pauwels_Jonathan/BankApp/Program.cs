@@ -9,7 +9,7 @@ namespace BankApp
             Bank bank = new Bank("Akasha Bank");
 
             Console.WriteLine("Bienvenue dans la banque Akasha !");
-            
+
             while (true)
             {
                 Console.WriteLine("\nMenu :");
@@ -19,7 +19,8 @@ namespace BankApp
                 Console.WriteLine("4 - Retirer de l'argent");
                 Console.WriteLine("5 - Afficher solde d'un compte");
                 Console.WriteLine("6 - Afficher solde total d'une personne");
-                Console.WriteLine("7 - Quitter");
+                Console.WriteLine("7 - Appliquer les intérêts à tous les comptes");
+                Console.WriteLine("8 - Quitter");
 
                 Console.Write("Choix : ");
                 string choice = Console.ReadLine();
@@ -53,6 +54,10 @@ namespace BankApp
                             break;
 
                         case "7":
+                            ApplyInterestToAll(bank);
+                            break;
+
+                        case "8":
                             Console.WriteLine("Au revoir !");
                             return;
 
@@ -132,7 +137,7 @@ namespace BankApp
         {
             Console.Write("Numéro de compte : ");
             string num = Console.ReadLine();
-            Console.WriteLine($"Solde du compte {num} : {bank.GetBalance(num)} €");
+            Console.WriteLine($"Solde du compte {num} : {bank.GetBalance(num):F2} €");
         }
 
         static void ShowTotalBalance(Bank bank)
@@ -154,8 +159,18 @@ namespace BankApp
             }
 
             double total = bank.GetTotalBalanceByPerson(person);
-            Console.WriteLine($"Solde total de {firstName} {lastName} : {total} €");
+            Console.WriteLine($"Solde total de {firstName} {lastName} : {total:F2} €");
+        }
+
+        static void ApplyInterestToAll(Bank bank)
+        {
+            foreach (var account in bank.Accounts.Values)
+            {
+                account.ApplyInterest();
+                Console.WriteLine($"Intérêts appliqués au compte {account.Number}, nouveau solde : {account.Balance:F2} €");
+            }
         }
     }
 }
+
 

@@ -30,9 +30,16 @@ namespace BankApp
             DateLastWithdraw = DateTime.Now;
         }
 
+        // 10. Calcul des intérêts pour compte épargne
+        protected override double CalculInterets()
+        {
+            return Balance * 0.045; // 4,5%
+        }
+
         public override string ToString()
         {
-            return $"Compte épargne {Number} | Solde : {Balance} € | Dernier retrait : {DateLastWithdraw} | Propriétaire : {Owner.FirstName} {Owner.LastName}";
+            return $"Compte épargne {Number} | Solde : {Balance:F2} € | Dernier retrait : {DateLastWithdraw} | Propriétaire : {Owner.FirstName} {Owner.LastName}";
         }
     }
 }
+

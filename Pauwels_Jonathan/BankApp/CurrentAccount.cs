@@ -30,9 +30,19 @@ namespace BankApp
             Balance -= amount;
         }
 
+        // 10. Calcul des intérêts pour compte courant
+        protected override double CalculInterets()
+        {
+            if (Balance > 0)
+                return Balance * 0.03;     // 3% si solde positif
+            else
+                return Balance * 0.0975;  // 9,75% si solde négatif
+        }
+
         public override string ToString()
         {
-            return $"Compte courant {Number} | Solde : {Balance} € | Crédit autorisé : {CreditLine} € | Propriétaire : {Owner.FirstName} {Owner.LastName}";
+            return $"Compte courant {Number} | Solde : {Balance:F2} € | Crédit autorisé : {CreditLine} € | Propriétaire : {Owner.FirstName} {Owner.LastName}";
         }
     }
 }
+

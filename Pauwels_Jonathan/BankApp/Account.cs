@@ -18,5 +18,15 @@ namespace BankApp
         // Méthodes abstraites à redéfinir dans les classes filles
         public abstract void Deposit(double amount);
         public abstract void Withdraw(double amount);
+
+        // 10. Méthode abstraite pour calculer les intérêts
+        protected abstract double CalculInterets();
+
+        // 11. Méthode publique pour appliquer les intérêts
+        public void ApplyInterest()
+        {
+            Balance += CalculInterets();
+        }
     }
 }
+
