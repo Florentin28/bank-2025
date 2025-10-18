@@ -2,14 +2,13 @@ using System;
 
 namespace BankApp
 {
-    public class CurrentAccount : Account
+    public class SavingsAccount : Account
     {
-        public double CreditLine { get; set; }
+        public DateTime DateLastWithdraw { get; private set; }
 
-        public CurrentAccount(string number, Person owner, double creditLine) 
-            : base(number, owner)
+        public SavingsAccount(string number, Person owner) : base(number, owner)
         {
-            CreditLine = creditLine;
+            DateLastWithdraw = DateTime.MinValue;
         }
 
         public override void Deposit(double amount)
@@ -24,15 +23,16 @@ namespace BankApp
             if (amount <= 0)
                 throw new ArgumentException("Le montant du retrait doit être positif.");
 
-            if (Balance - amount < -CreditLine)
-                throw new InvalidOperationException("Solde insuffisant ou dépassement de la ligne de crédit.");
+            if (Balance - amount < 0)
+                throw new InvalidOperationException("Solde insuffisant pour un compte épargne.");
 
             Balance -= amount;
+            DateLastWithdraw = DateTime.Now;
         }
 
         public override string ToString()
         {
-            return $"Compte courant {Number} | Solde : {Balance} € | Crédit autorisé : {CreditLine} € | Propriétaire : {Owner.FirstName} {Owner.LastName}";
+            return $"Compte épargne {Number} | Solde : {Balance} € | Dernier retrait : {DateLastWithdraw} | Propriétaire : {Owner.FirstName} {Owner.LastName}";
         }
     }
 }

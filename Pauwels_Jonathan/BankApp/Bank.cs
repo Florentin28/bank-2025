@@ -7,15 +7,15 @@ namespace BankApp
     public class Bank
     {
         public string Name { get; set; }
-        public Dictionary<string, CurrentAccount> Accounts { get; private set; }
+        public Dictionary<string, Account> Accounts { get; private set; }
 
         public Bank(string name)
         {
             Name = name;
-            Accounts = new Dictionary<string, CurrentAccount>();
+            Accounts = new Dictionary<string, Account>();
         }
 
-        public void AddAccount(CurrentAccount account)
+        public void AddAccount(Account account)
         {
             if (Accounts.ContainsKey(account.Number))
                 throw new ArgumentException("Un compte avec ce numéro existe déjà.");
