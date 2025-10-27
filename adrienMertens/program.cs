@@ -103,7 +103,13 @@ class Bank
     
     public void ShowAllCurrentAccounts()
     {
-        
+        Console.WriteLine("Liste des comptes :");
+        foreach (var account in _accounts.Values)
+        {
+            Console.WriteLine(
+                $"N°: {account.Number}, " +
+                $"Solde: {account.Balance}");
+        }
     }
 }
 
@@ -120,6 +126,7 @@ class Program
         account.Deposit(2000);
         account.WithDraw(100);
         Console.WriteLine($"le solde du compte {account.Number} est de {bank.ReturnSoldeCurrentAccount(account.Number)}");
+        bank.ShowAllCurrentAccounts();
         
         bank.DeleteAccount(account.Number);
     }
