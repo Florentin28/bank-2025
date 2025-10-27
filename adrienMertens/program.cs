@@ -81,7 +81,13 @@ class Bank
 
     public void DeleteAccount(string number)
     {
-        
+        if (!_accounts.ContainsKey(number))
+        {
+            Console.WriteLine("Erreur : Aucun compte trouvé avec ce numéro.");
+            return;
+        }
+        _accounts.Remove(number);
+        Console.WriteLine($"Compte {number} supprimé avec succès.");
     }
 
     public double ReturnSoldeCurrentAccount(string number)
@@ -101,12 +107,16 @@ class Program
     {
         // Exemple d'utilisation
         var bank = new Bank("Ma Banque");
-        var person = new Person("Adrien", "Mertens", new DateTime(1990, 1, 1));
+        var person = new Person("Adrien", "Mertens", new DateTime(2000, 10, 23));
         var account = new CurrentAccount("BE123456789", person, 1000);
         
         bank.AddAccount(account);
         account.Deposit(2000);
         account.WithDraw(100);
+        
+        
+        
+        bank.DeleteAccount(account.Number);
     }
     
 }
