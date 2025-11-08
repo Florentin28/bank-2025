@@ -1,7 +1,7 @@
 class Bank(Dictionary<string, IBankAccount> accounts, string name)
 {
     public Dictionary<string, IBankAccount> Accounts { get; } = accounts;
-    public string Name { get; set; } = name;
+    public string Name { get; private set; } = name;
     public void AddAccount(IBankAccount account)
     {
         if (Accounts.ContainsKey(account.Number))
