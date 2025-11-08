@@ -12,7 +12,7 @@ public class Program
         Client client1 = new Client("Maximus", "Durian", new DateTime(1985, 5, 10));
         Client client2 = new Client("Aliigna", "Herie", new DateTime(1992, 11, 20));
 
-        CurrentAccount currentAcc1 = new CurrentAccount("BE001", client1, 1000);
+        CurrentAccount currentAcc1 = new CurrentAccount("BE001", client1);
 //        SavingAccount savingAcc1 = new SavingAccount("BE002", client1);
         CurrentAccount currentAcc2 = new CurrentAccount("BE003", client2);
         currentAcc1.LineOfCredit = 500;
@@ -31,4 +31,11 @@ public class Program
 
         myBank.DisplayAccountsList();
     }
+public class InsufficientBalanceException : Exception
+        {
+            public InsufficientBalanceException(string message) : base(message)
+            {
+                Console.WriteLine("Le montant ne peut etre retiré");
+            }
+        }
 }
