@@ -6,8 +6,9 @@ namespace BankApp
     {
         public string Number { get; private set; }
         public Person Owner { get; private set; }
-        public double Balance { get; protected set; } // lecture seule externe, modifiable seulement à l'intérieur
+        public double Balance { get; protected set; }
 
+        // Constructeur numéro + propriétaire
         public Account(string number, Person owner)
         {
             Number = number;
@@ -15,18 +16,22 @@ namespace BankApp
             Balance = 0.0;
         }
 
-        // Méthodes abstraites à redéfinir dans les classes filles
+        // Constructeur numéro + propriétaire + solde initial
+        public Account(string number, Person owner, double balance)
+        {
+            Number = number;
+            Owner = owner;
+            Balance = balance;
+        }
+
         public abstract void Deposit(double amount);
         public abstract void Withdraw(double amount);
 
-        // 10. Méthode abstraite pour calculer les intérêts
         protected abstract double CalculInterets();
 
-        // 11. Méthode publique pour appliquer les intérêts
         public void ApplyInterest()
         {
             Balance += CalculInterets();
         }
     }
 }
-

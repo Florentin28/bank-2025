@@ -6,7 +6,7 @@ namespace BankApp
     {
         public double CreditLine { get; private set; }
 
-        // Constructeur standard : numéro + propriétaire + crédit
+        // Constructeur standard
         public CurrentAccount(string number, Person owner, double creditLine) 
             : base(number, owner)
         {
@@ -41,9 +41,9 @@ namespace BankApp
         protected override double CalculInterets()
         {
             if (Balance > 0)
-                return Balance * 0.03;     // 3% si solde positif
+                return Balance * 0.03;
             else
-                return Balance * 0.0975;  // 9,75% si solde négatif
+                return Balance * 0.0975;
         }
 
         public override string ToString()
