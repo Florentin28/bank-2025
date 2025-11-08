@@ -4,10 +4,18 @@ namespace BankApp
 {
     public class CurrentAccount : Account
     {
-        public double CreditLine { get; set; }
+        public double CreditLine { get; private set; }
 
+        // Constructeur standard : numéro + propriétaire + crédit
         public CurrentAccount(string number, Person owner, double creditLine) 
             : base(number, owner)
+        {
+            CreditLine = creditLine;
+        }
+
+        // Constructeur avec solde initial
+        public CurrentAccount(string number, Person owner, double creditLine, double initialBalance) 
+            : base(number, owner, initialBalance)
         {
             CreditLine = creditLine;
         }
@@ -30,7 +38,6 @@ namespace BankApp
             Balance -= amount;
         }
 
-        // 10. Calcul des intérêts pour compte courant
         protected override double CalculInterets()
         {
             if (Balance > 0)
@@ -45,4 +52,3 @@ namespace BankApp
         }
     }
 }
-

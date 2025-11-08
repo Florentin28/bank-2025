@@ -2,22 +2,179 @@ using System;
 
 namespace BankApp
 {
-    public class Person
+    class Program
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public DateTime BirthDate { get; set; }
-
-        public Person(string firstName, string lastName, DateTime birthDate)
+        static void Main(string[] args)
         {
-            FirstName = firstName;
-            LastName = lastName;
-            BirthDate = birthDate;
+            Bank bank = new Bank("Akasha Bank");
+
+            Console.WriteLine("Bienvenue dans la banque Akasha !");
+
+            while (true)
+            {
+                Console.WriteLine("\nMenu :");
+                Console.WriteLine("1 - Créer un compte courant");
+                Console.WriteLine("2 - Créer un compte épargne");
+                Console.WriteLine("3 - Déposer de l'argent");
+                Console.WriteLine("4 - Retirer de l'argent");
+                Console.WriteLine("5 - Afficher solde d'un compte");
+                Console.WriteLine("6 - Afficher solde total d'une personne");
+                Console.WriteLine("7 - Appliquer les intérêts à tous les comptes");
+                Console.WriteLine("8 - Quitter");
+
+                Console.Write("Choix : ");
+                string choice = Console.ReadLine();
+
+                try
+                {
+                    switch (choice)
+                    {
+                        case "1":
+                            CreateCurrentAccount(bank);
+                            break;
+                        case "2":
+                            CreateSavingsAccount(bank);
+                            break;
+                        case "3":
+                            Deposit(bank);
+                            break;
+                        case "4":
+                            Withdraw(bank);
+                            break;
+                        case "5":
+                            ShowAccountBalance(bank);
+                            break;
+                        case "6":
+                            ShowTotalBalance(bank);
+                            break;
+                        case "7":
+                            ApplyInterestToAll(bank);
+                            break;
+                        case "8":
+                            Console.WriteLine("Au revoir !");
+                            return;
+                        default:
+                            Console.WriteLine("Choix invalide.");
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Erreur : {ex.Message}");
+                }
+            }
         }
 
-        public override string ToString()
+        // ===== Fonctions auxiliaires =====
+
+        static void CreateCurrentAccount(Bank bank)
         {
-            return $"{FirstName} {LastName} (né le {BirthDate.ToShortDateString()})";
+            Console.Write("Prénom : ");
+            string firstName = Console.ReadLine();
+            Console.Write("Nom : ");
+            string lastName = Console.ReadLine();
+            Console.Write("Date de naissance (yyyy-mm-dd) : ");
+            DateTime birthDate = DateTime.Parse(Console.ReadLine());
+            Person owner = new Person(firstName, lastName, birthDate);
+
+            Console.Write("Numéro de compte : ");
+            string number = Console.ReadLine();
+            Console.Write("Ligne de crédit : ");
+            double credit = double.Parse(Console.ReadLine());
+
+            Console.Write("Solde initial (laisser vide pour 0) : ");
+            string balanceInput = Console.ReadLine();
+            CurrentAccount account;
+            if (string.IsNullOrWhiteSpace(balanceInput))
+                account = new CurrentAccount(number, owner, credit);
+            else
+                account = new CurrentAccount(number, owner, credit, double.Parse(balanceInput));
+
+            bank.AddAccount(account);
+            Console.WriteLine("Compte courant créé avec succès !");
+        }
+
+        static void CreateSavingsAccount(Bank bank)
+        {
+            Console.Write("Prénom : ");
+            string firstName = Console.ReadLine();
+            Console.Write("Nom : ");
+            string lastName = Console.ReadLine();
+            Console.Write("Date de naissance (yyyy-mm-dd) : ");
+            DateTime birthDate = DateTime.Parse(Console.ReadLine());
+            Person owner = new Person(firstName, lastName, birthDate);
+
+            Console.Write("Numéro de compte : ");
+            string number = Console.ReadLine();
+
+            Console.Write("Solde initial (laisser vide pour 0) : ");
+            string balanceInput = Console.ReadLine();
+            SavingsAccount account;
+            if (string.IsNullOrWhiteSpace(balanceInput))
+                account = new SavingsAccount(number, owner);
+            else
+                account = new SavingsAccount(number, owner, double.Parse(balanceInput));
+
+            bank.AddAccount(account);
+            Console.WriteLine("Compte épargne créé avec succès !");
+        }
+
+        static void Deposit(Bank bank)
+        {
+            Console.Write("Numéro de compte : ");
+            string num = Console.ReadLine();
+            Console.Write("Montant à déposer : ");
+            double amount = double.Parse(Console.ReadLine());
+            bank.Accounts[num].Deposit(amount);
+            Console.WriteLine("Dépôt effectué !");
+        }
+
+        static void Withdraw(Bank bank)
+        {
+            Console.Write("Numéro de compte : ");
+            string num = Console.ReadLine();
+            Console.Write("Montant à retirer : ");
+            double amount = double.Parse(Console.ReadLine());
+            bank.Accounts[num].Withdraw(amount);
+            Console.WriteLine("Retrait effectué !");
+        }
+
+        static void ShowAccountBalance(Bank bank)
+        {
+            Console.Write("Numéro de compte : ");
+            string num = Console.ReadLine();
+            Console.WriteLine($"Solde du compte {num} : {bank.GetBalance(num):F2} €");
+        }
+
+        static void ShowTotalBalance(Bank bank)
+        {
+            Console.Write("Prénom : ");
+            string firstName = Console.ReadLine();
+            Console.Write("Nom : ");
+            string lastName = Console.ReadLine();
+            Person person = null;
+
+            foreach (var acc in bank.Accounts.Values)
+                if (acc.Owner.FirstName == firstName && acc.Owner.LastName == lastName)
+                    person = acc.Owner;
+
+            if (person == null)
+            {
+                Console.WriteLine("Aucune personne trouvée !");
+                return;
+            }
+
+            double total = bank.GetTotalBalanceByPerson(person);
+            Console.WriteLine($"Solde total de {firstName} {lastName} : {total:F2} €");
+        }
+
+        static void ApplyInterestToAll(Bank bank)
+        {
+            foreach (var account in bank.Accounts.Values)
+            {
+                account.ApplyInterest();
+                Console.WriteLine($"Intérêts appliqués au compte {account.Number}, nouveau solde : {account.Balance:F2} €");
+            }
         }
     }
 }

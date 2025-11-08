@@ -6,7 +6,16 @@ namespace BankApp
     {
         public DateTime DateLastWithdraw { get; private set; }
 
-        public SavingsAccount(string number, Person owner) : base(number, owner)
+        // Constructeur standard
+        public SavingsAccount(string number, Person owner) 
+            : base(number, owner)
+        {
+            DateLastWithdraw = DateTime.MinValue;
+        }
+
+        // Constructeur avec solde initial
+        public SavingsAccount(string number, Person owner, double initialBalance) 
+            : base(number, owner, initialBalance)
         {
             DateLastWithdraw = DateTime.MinValue;
         }
@@ -30,7 +39,6 @@ namespace BankApp
             DateLastWithdraw = DateTime.Now;
         }
 
-        // 10. Calcul des intérêts pour compte épargne
         protected override double CalculInterets()
         {
             return Balance * 0.045; // 4,5%
@@ -42,4 +50,3 @@ namespace BankApp
         }
     }
 }
-
