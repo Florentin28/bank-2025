@@ -1,17 +1,13 @@
-class CurrentAccount
+class CurrentAccount: Account
 {
-    public string Number { get; set; }
-    public double Balance { get; private set; }
     public double CreditLine { get; private set; }
-    public Person Owner { get; set; }
-    public CurrentAccount(string number, Person owner, double creditLine = 0)
-    {
+    public CurrentAccount(string number, Person owner, double creditLine = 0, double balance = 0) : base(number, owner ){
         Number = number;
         Owner = owner;
-        Balance = 0;
+        Balance = balance;
         CreditLine = creditLine;
     }
-    public void Deposit(double amount)
+    public override void Deposit(double amount)
     {
         if (amount <= 0)
         {
@@ -19,7 +15,20 @@ class CurrentAccount
         }
         Balance += amount;
     }
-    public void Withdraw(double amount)
+    protected override double CalculInterets()
+    {
+           if (this.Balance < 0)
+            {
+                return this.Balance * 0.03;
+            }
+            else
+            {
+                return this.Balance * 0.0975;
+            }
+        }
+       
+    
+    public override void Withdraw(double amount)
     {
         if (amount <= 0)
         {
