@@ -82,9 +82,8 @@ public abstract class Account : IBankAccount
         // On ajoute au solde le montant des intérêts calculés.
         Balance += CalculInterets();
     }
-    public delegate void NegativeBalanceDelegate(Account account);
     
-    public event NegativeBalanceDelegate? NegativeBalanceEvent;
+    public event Action<Account>? NegativeBalanceEvent;
 
     protected virtual void OnNegativeBalanceEvent()
     {
