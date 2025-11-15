@@ -217,9 +217,9 @@ public class Program
         var person = new Person("Alice", "Dupont", new DateTime(1990, 1, 1));
 
         // Création des comptes
-        var current = new CurrentAccount("CA123", person, 100);       
-        var current2 = new CurrentAccount("CA124", person, 500, 200);    
-        var savings = new SavingsAccount("SA123", person, 1000);          
+        var current = new CurrentAccount("CA123", person, 100);
+        var current2 = new CurrentAccount("CA124", person, 500, 200);
+        var savings = new SavingsAccount("SA123", person, 1000);
 
         var bank = new Bank("Ma Banque");
         bank.AddAccount(current);
@@ -239,8 +239,8 @@ public class Program
 
         try
         {
-            current.Withdraw(550);   
-            current2.Withdraw(800);  
+            current.Withdraw(550);
+            current2.Withdraw(800);
             savings.Withdraw(200);
         }
         catch (ArgumentOutOfRangeException ex)
@@ -265,4 +265,5 @@ public class Program
         Console.WriteLine("Courant CA123 après intérêts : " + current.GetBalance());
         Console.WriteLine("Courant CA124 après intérêts : " + current2.GetBalance());
     }
+    
 }
