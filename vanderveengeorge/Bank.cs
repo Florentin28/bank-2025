@@ -11,9 +11,9 @@ class Bank(Dictionary<string, IBankAccount> accounts, string name)
         else
         {
             Accounts.Add(account.Number, account);
-            if (account is CurrentAccount)
+            if (account is CurrentAccount ca)
             {
-                ((Account)account).NegativeBalanceEvent += OnNegativeBalance;
+                ca.NegativeBalanceEvent += OnNegativeBalance;
             }
         }
     }
