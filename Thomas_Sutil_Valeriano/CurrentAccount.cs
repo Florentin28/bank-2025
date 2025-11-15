@@ -1,9 +1,18 @@
 public class CurrentAccount
 {
-    public required string Number { get; set; }
+    public string Number { get; set; }
     public double Balance { get; private set; } // ReadOnly
     public double CreditLine { get; set; }
-    public required Person Owner { get; set; }
+    public Person Owner { get; set; }
+
+    // Constructor
+    public CurrentAccount (string number, double balance, double creditLine, Person owner)
+    {
+        Number = number;
+        Balance = balance;
+        CreditLine = creditLine;
+        Owner = owner;
+    }
 
     public void Withdraw(double amount)
     {
