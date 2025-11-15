@@ -11,6 +11,7 @@ class Bank(Dictionary<string, IBankAccount> accounts, string name)
         else
         {
             Accounts.Add(account.Number, account);
+            ((Account)account).NegativeBalanceEvent += OnNegativeBalance;
         }
     }
     public void DeleteAccount(string number)
@@ -57,4 +58,10 @@ class Bank(Dictionary<string, IBankAccount> accounts, string name)
             Console.WriteLine($"{user.FirstName} {user.LastName} n'a pas de comptes");
         }
     }
+
+    private void OnNegativeBalance(IBankAccount account)
+    {
+        Console.WriteLine($"Le numéro de compte {account.Number} vient de passer en négatif");
+    }
+
 }

@@ -33,6 +33,6 @@ class CurrentAccount : Account
     }
     protected override double CalculateInterest()
     {
-        return Balance * (Balance >= 0 ? 0.035 : 0.0975);
+        return Balance * (Balance >= 0 ? 0.03 : 0.0975);
     }
 }
