@@ -42,23 +42,24 @@ public class CurrentAccount : Account
     /// <param name="amount">Montant à retirer.</param>
     public override void WithDraw(double amount)
     {
-        if (amount <= 0)
-        {
-            Console.WriteLine("Erreur : Le montant doit être positif");
-            return;
-        }
-
+        double previousBalance = Balance;
         // On vérifie que le solde après retrait ne dépasse pas la ligne de crédit autorisée.
         if (Balance - amount < -CreditLine)
         {
             Console.WriteLine("Erreur : Le solde est insuffisant");
             return;
         }
-
         base.WithDraw(amount);
         Console.WriteLine($"Retrait de {amount} effectué avec succès.");
+        
+        // Si le compte vient de passer en négatif, on déclenche l'événement
+        if (previousBalance >= 0 && Balance < 0)
+        {
+            OnNegativeBalanceEvent();
+        }
+        
     }
-
+    
     /// <summary>
     /// Effectue un dépôt sur le compte courant.
     /// </summary>

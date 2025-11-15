@@ -43,7 +43,8 @@ public abstract class Account : IBankAccount
     /// <param name="amount">Montant à retirer.</param>
     public virtual void WithDraw(double amount)
     {
-        if (amount > Balance)
+        
+        if (amount < 0 )
         {
             throw new InsufficientBalanceException("Le solde du compte est insuffisant.");
         }
@@ -81,6 +82,14 @@ public abstract class Account : IBankAccount
         // On ajoute au solde le montant des intérêts calculés.
         Balance += CalculInterets();
     }
+    public delegate void NegativeBalanceDelegate(Account account);
+    
+    public event NegativeBalanceDelegate? NegativeBalanceEvent;
+
+    protected virtual void OnNegativeBalanceEvent()
+    {
+        NegativeBalanceEvent?.Invoke(this);
+    }
 }
 
 public class InsufficientBalanceException : Exception
@@ -90,3 +99,4 @@ public class InsufficientBalanceException : Exception
         Console.WriteLine(message);
     }
 }
+

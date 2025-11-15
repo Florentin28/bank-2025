@@ -25,6 +25,13 @@ public class Bank
         
         _accounts.Add(account.Number, account);
         Console.WriteLine($"Compte {account.Number} ajouté avec succès.");
+        
+        // Si c'est un Account (CurrentAccount, SavingAccount, ...),
+        // on s'abonne à l'événement NegativeBalanceEvent
+        if (account is Account bankAccount)
+        {
+            bankAccount.NegativeBalanceEvent += NegativeBalanceAction;
+        }
     }
 
     /// <summary>
@@ -73,5 +80,14 @@ public class Bank
                 $"N°: {account.Number}, " +
                 $"Solde: {account.Balance}");
         }
-    }  
+    }
+    
+    /// <summary>
+    /// Méthode appelée lorsque le solde d'un compte vient de passer en négatif.
+    /// </summary>
+    /// <param name="account">Compte concerné.</param>
+    private void NegativeBalanceAction(Account account)
+    {
+        Console.WriteLine($"Le numéro de compte {account.Number} vient de passer en négatif");
+    }
 }

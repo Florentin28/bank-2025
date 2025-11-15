@@ -29,7 +29,7 @@
         IBankAccount currentAccountAdrien = new CurrentAccount("BE123456789", adrien, creditLine: 1000);
 
         // Création d'un compte d'épargne pour Julie.
-        IBankAccount savingAccountJulie = new SavingAccount("BE987654321", julie, DateTime.Now);
+        IBankAccount savingAccountJulie = new CurrentAccount("BE987654321", julie, creditLine: 1000);
 
         // Ajout des comptes à la banque.
         bank.AddAccount(currentAccountAdrien);
@@ -41,7 +41,7 @@
 
         // Quelques opérations sur le compte d'épargne de Julie.
         savingAccountJulie.Deposit(5000);     // dépôt de 5000
-        savingAccountJulie.WithDraw(500);     // retrait de 500
+        savingAccountJulie.WithDraw(5500);     // retrait de 500
 
         // Affichage des soldes avant intérêts.
         Console.WriteLine("=== Soldes avant application des intérêts ===");
