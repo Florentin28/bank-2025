@@ -1,8 +1,8 @@
 class Person
 {
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
-    public DateTime BirthDate { get; set; }
+    private string FirstName { get ; set; }
+    private string LastName { get; set; }
+    private DateTime BirthDate { get; set; }
 
     public Person(string firstName, string lastName, DateTime birthDate)
     {

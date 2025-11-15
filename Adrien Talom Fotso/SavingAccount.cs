@@ -1,14 +1,18 @@
 class SavingAccount: Account 
 {
     DateTime DateLastWithdraw { get; set; }
-    
-    private double limitWithdraw { get;  set; }= 30;
 
+    private double limitWithdraw { get; set; } = 30;
+
+    public SavingAccount(string number, Person owner, double initialBalance) : base(number, owner, initialBalance)
+    {
+        
+        Owner = owner;
+        DateLastWithdraw = DateTime.Now;
+    }
     public SavingAccount(string number, Person owner) : base(number, owner)
     {
-        this.Number = number;
         Owner = owner;
-        Balance = base.Balance;
         DateLastWithdraw = DateTime.Now;
 
     }
@@ -22,7 +26,7 @@ class SavingAccount: Account
         {
             throw new ArgumentException("Deposit amount must be positive.");
         }
-        Balance += amount;
+        base.Deposit(amount);
     }
     public override void Withdraw(double amount)
     {
@@ -38,7 +42,7 @@ class SavingAccount: Account
         {
             throw new InvalidOperationException("Insufficient funds.");
         }
-        Balance -= amount;
+        base.Withdraw(amount);
         DateLastWithdraw = DateTime.Now;
     }
 }

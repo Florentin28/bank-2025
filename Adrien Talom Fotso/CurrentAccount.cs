@@ -1,19 +1,41 @@
 class CurrentAccount: Account
-{
+{   
     public double CreditLine { get; private set; }
-    public CurrentAccount(string number, Person owner, double creditLine = 0, double balance = 0) : base(number, owner ){
-        Number = number;
+    public CurrentAccount(string number, Person owner) : base(number, owner)
+    {
+
         Owner = owner;
-        Balance = balance;
+        try
+        {
+
+            if (this.CreditLine < 0)
+            {
+                throw new ArgumentException("Credit line must be non-negative.");
+            }
+        }
+
+        catch (ArgumentException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }   
+        CreditLine = this.CreditLine;
+        
+        
+    }
+    public CurrentAccount(string number, Person owner, double creditLine = 0, double balance = 0) : this(number, owner)
+    {
+        
+        Owner = owner;
         CreditLine = creditLine;
     }
+    
     public override void Deposit(double amount)
     {
         if (amount <= 0)
         {
             throw new ArgumentException("Deposit amount must be positive.");
         }
-        Balance += amount;
+        base.Deposit(amount);
     }
     protected override double CalculInterets()
     {
@@ -38,7 +60,7 @@ class CurrentAccount: Account
         {
             throw new InvalidOperationException("Insufficient funds including credit line.");
         }
-        Balance -= amount;
+        base.Withdraw(amount);
     }
 
    
