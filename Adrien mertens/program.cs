@@ -16,6 +16,8 @@
     /// </summary>
     static void Main()
     {
+        try
+        {
         // Création d'une banque.
         var bank = new Bank();
 
@@ -70,5 +72,11 @@
         Console.WriteLine();
         Console.WriteLine("=== Comptes restants dans la banque ===");
         bank.ShowAllCurrentAccounts();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+        
     }
 }

@@ -8,8 +8,20 @@ public class CurrentAccount : Account
     /// <summary>
     /// Ligne de crédit autorisée (découvert maximum).
     /// </summary>
-    private double CreditLine { get; set; }
+    private double _CreditLine;
 
+    public double CreditLine
+    {
+        get { return _CreditLine; }
+        set
+        {
+            if (value <= 0)
+            {
+                throw new ArgumentOutOfRangeException("La ligne de crédit doit être positive.");
+            }
+            _CreditLine = value;
+        }
+    }
     /// <summary>
     /// Constructeur d'un compte courant.
     /// </summary>
@@ -20,6 +32,7 @@ public class CurrentAccount : Account
         : base(number, owner)
     {
         CreditLine = creditLine;
+        _CreditLine = creditLine;
     }
     
     /// <summary>

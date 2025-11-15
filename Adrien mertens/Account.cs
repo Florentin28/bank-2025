@@ -43,6 +43,10 @@ public abstract class Account : IBankAccount
     /// <param name="amount">Montant à retirer.</param>
     public virtual void WithDraw(double amount)
     {
+        if (amount > Balance)
+        {
+            throw new InsufficientBalanceException("Le solde du compte est insuffisant.");
+        }
         Balance -= amount;
     }
     
@@ -53,7 +57,12 @@ public abstract class Account : IBankAccount
     /// <param name="amount">Montant à déposer.</param>
     public virtual void Deposit(double amount)
     {
+        if (amount < 0)
+        {
+            throw new ArgumentOutOfRangeException("Le montant déposé est négatif.");
+        }
         Balance += amount;
+        
     }
 
     /// <summary>
@@ -71,5 +80,13 @@ public abstract class Account : IBankAccount
     {
         // On ajoute au solde le montant des intérêts calculés.
         Balance += CalculInterets();
+    }
+}
+
+public class InsufficientBalanceException : Exception
+{
+    public InsufficientBalanceException(string message) : base(message)
+    {
+        Console.WriteLine(message);
     }
 }
