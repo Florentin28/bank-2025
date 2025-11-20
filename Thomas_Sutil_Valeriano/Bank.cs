@@ -10,7 +10,11 @@ public class Bank
         Name = name; 
     }
 
-    // Method for Add New Account
+    // Method
+    public void NegativeBalanceAction(Account account)
+    {
+        Console.WriteLine($"Alert: Account {account.Number} has a negative balance of {account.Balance}.");
+    }
     public void AddAccount(Account account)
     {
         // Check if the number account is empy or null
@@ -26,9 +30,9 @@ public class Bank
             return;
         }
         Accounts.Add(account.Number, account);
+        account.OnNegativeBalance += NegativeBalanceAction;
         Console.WriteLine($"Account {account.Number} added successfully !");
     }
-    // Method for Delete Account
     public void DeleteAccount(Account account)
     {
         if (string.IsNullOrEmpty(account.Number))
@@ -42,7 +46,6 @@ public class Bank
         Accounts.Remove(account.Number);
         Console.WriteLine($"Account {account.Number} deleted successfully !");
     }
-    // Method for return the Balance Account
 
     public double BalanceGet(Account account)
     {
@@ -50,7 +53,6 @@ public class Bank
         return account.Balance;
     }
 
-    // Method for return the SUM of Balance for all Account with the name
     public double GetTotalBalanceAll(Person person)
     {
         if (person == null)

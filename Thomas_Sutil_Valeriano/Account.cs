@@ -1,7 +1,7 @@
 ﻿public abstract class Account : IBankAccount
 {
     public string Number { get; private set; }
-    public double Balance { get; private set; } // ReadOnly
+    public double Balance { get; protected set; } // ReadOnly
     public Person Owner { get; private set; }
     
     // 2 Construct
@@ -16,20 +16,24 @@
         Number = number;
         Owner = owner;
     }
-
+    // Event
+    public event Action<Account> BalanceNegativeEvent;
     // Method
+    protected void NotifyNegativeBalance()
+    {
+        BalanceNegativeEvent?.Invoke(this);
+    }
     public virtual void Withdraw(double amount) //This Method can be override with inheritance
     {
         double CurrentBalance = Balance;
         if (amount <= 0)
         {
-            Console.WriteLine("This amount is less or equal than 0");
-            return;
+            throw new ArgumentOutOfRangeException(nameof(amount), "Amount must be greater than zero.");
         }
         if (Balance - amount <= 0)
         {
-            Console.WriteLine("Insufficient funds");
-            return;
+            NotifyNegativeBalance();
+            throw new InsufficientBalanceException("Insufficient balance for this withdrawal.");
         }
         Balance -= amount;
         Console.WriteLine($"Withdrawn: {amount}. Previous Balance: {CurrentBalance}, New Balance: {Balance}");
@@ -40,8 +44,7 @@
         double CurrentBalance = Balance;
         if (amount <= 0)
         {
-            Console.WriteLine("You can't deposit this amount, less than 0");
-            return;
+            throw new ArgumentOutOfRangeException(nameof(amount), "Amount must be greater than zero.");
         }
         Balance += amount;
         Console.WriteLine($"Deposited: {amount}. Previous Balance: {CurrentBalance}, New Balance: {Balance}");
