@@ -1,24 +1,38 @@
-﻿// Test for Person
-Person p = new("Thomas", "Sutil", new DateTime(2001,3,25));
+﻿using System;
+class Program
+{
+    static void Main()
+    {
+        // Person Test
+        Person p = new("Thomas", "Sutil", new DateTime(2001,3,25));
+        p.DisplayInfoPerson();
 
-//Testing CurrentAccount Method
-CurrentAccount pA = new("BE3256", 1200, 0, p);
-CurrentAccount pB = new("BE3257", 1450, 0, p);
-pA.Withdraw(200);
-pA.Deposit(350);
+        // CurrentAccount Test
+        CurrentAccount ca = new("BE58912345678901", 1500.00, 500.00, p);
+        CurrentAccount caN = new("", 1500.00, 500.00, p);
+        ca.DisplayAccountInfo();
+        ca.Withdraw(200.00);
+        ca.Deposit(350.00);
+        ca.ApplyInterest();
+        
+        // SavingsAccount Test
+        SavingsAccount sa = new("BE58910987654321", 2500.00, p);
+        sa.DisplayAccountInfo();
+        sa.Withdraw(300.00);
+        sa.Deposit(450.00);
+        sa.ApplyInterest();
 
-// Test for Bank
-Bank TotoBank = new("TotoBank");
-TotoBank.AddAccount(pA);
-TotoBank.AddAccount(pB);
-TotoBank.BalanceGet(pB);
-TotoBank.GetTotalBalanceAll(p);
+        // Bank Test
+        Bank bank = new("Toto Bank");
+        bank.AddAccount(ca);
+        bank.AddAccount(ca);//Test duplicate account addition
+        bank.AddAccount(caN);//Test invalid account addition
+        bank.AddAccount(sa);
+        bank.DeleteAccount(caN);//Test invalid account deletion
+        bank.DeleteAccount(ca);
+        bank.BalanceGet(ca);
+        bank.GetTotalBalanceAll(p);
 
-// Test for SavingsAccount
-SavingsAccount pC = new("BE3258", 1789, p);
-pC.Withdraw(200);
-
-Console.WriteLine(p.FirstName + " " + p.LastName); //Person
-Console.WriteLine(pA.Number + " " + pA.Balance + " " + pA.CreditLine + " " + p.FirstName); //CurrentAccount
-Console.WriteLine($"{pC.Number} {pC.Balance} {pC.DateLastWithdraw} {pC.Owner.LastName}"); //SavingsAccount
+    }
+}
 

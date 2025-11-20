@@ -35,9 +35,9 @@ public class Bank
         {
             Console.WriteLine("Number Account is empty");
         }
-        if (Accounts.ContainsKey(account.Number))
+        if (!Accounts.ContainsKey(account.Number))
         {
-            Console.WriteLine("This number account already exist");
+            Console.WriteLine("This number account not exist");
         }
         Accounts.Remove(account.Number);
         Console.WriteLine($"Account {account.Number} deleted successfully !");
