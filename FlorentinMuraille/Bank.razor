@@ -1,0 +1,164 @@
+@page "/"
+@using Microsoft.AspNetCore.Components.Web
+@rendermode @(new Microsoft.AspNetCore.Components.Web.InteractiveServerRenderMode())
+@inject BankService BankService
+
+<style>
+    :root { --bank-blue: #004a99; --bank-gold: #ffcc00; }
+    .hero-gradient { background: linear-gradient(135deg, #002f6c 0%, #004a99 100%); color: white; border-radius: 15px; }
+    .card-account { border: none; border-radius: 12px; transition: transform 0.2s; background: #ffffff; border-left: 5px solid #004a99; }
+    .card-account:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+    .balance-positive { color: #28a745; font-weight: bold; }
+    .balance-negative { color: #dc3545; font-weight: bold; }
+    .btn-action { border-radius: 8px; font-weight: 500; }
+</style>
+
+<div class="container py-5">
+    @* --- HEADER --- *@
+    <div class="hero-gradient p-4 mb-5 shadow-lg d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="display-5 fw-bold mb-0"><i class="bi bi-shield-check"></i> @BankService.MyBank.Name</h1>
+            <p class="mb-0 opacity-75">Plateforme de gestion d'actifs sécurisée</p>
+        </div>
+        <div class="text-end">
+            <span class="badge bg-warning text-dark mb-2">Statut : Serveur Actif</span>
+            <h4 class="mb-0">@BankService.MyBank.Accounts.Count <small>Comptes actifs</small></h4>
+        </div>
+    </div>
+
+    <div class="row">
+        @* --- COLONNE GAUCHE : FORMULAIRE --- *@
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 mb-4 p-4">
+                <h4 class="mb-4 text-dark fw-bold"><i class="bi bi-person-plus"></i> Nouveau Client</h4>
+                
+                <div class="mb-3">
+                    <label class="form-label small text-muted">Prénom</label>
+                    <input @bind="firstName" type="text" class="form-control bg-light border-0" placeholder="Ex: Jean" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label small text-muted">Nom de famille</label>
+                    <input @bind="lastName" type="text" class="form-control bg-light border-0" placeholder="Ex: Dupont" />
+                </div>
+                <div class="mb-4">
+                    <label class="form-label small text-muted">Type de compte</label>
+                    <select @bind="accountType" class="form-select bg-light border-0">
+                        <option value="Current">Compte Courant (Intérêts 3%)</option>
+                        <option value="Savings">Compte Épargne (Intérêts 4.5%)</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary btn-action py-3 w-100 shadow" @onclick="HandleCreate">
+                    Ouvrir le compte
+                </button>
+
+                @if (!string.IsNullOrEmpty(error))
+                {
+                    <div class="alert alert-danger mt-3 py-2 small border-0 shadow-sm">
+                        <i class="bi bi-exclamation-circle"></i> @error
+                    </div>
+                }
+            </div>
+        </div>
+
+        @* --- COLONNE DROITE : LISTE --- *@
+        <div class="col-lg-8">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="fw-bold m-0 text-secondary">Répertoire des comptes</h4>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button">Trier par</button>
+                </div>
+            </div>
+
+            @if (BankService.MyBank.Accounts.Count == 0)
+            {
+                <div class="text-center py-5 bg-light rounded-4 border-dashed">
+                    <i class="bi bi-bank2 display-1 text-muted opacity-25"></i>
+                    <p class="mt-3 text-muted">Aucun compte n'a été ouvert pour le moment.</p>
+                </div>
+            }
+
+            @foreach (var acc in BankService.MyBank.Accounts.Values)
+            {
+                <div class="card card-account shadow-sm mb-3">
+                    <div class="card-body d-flex align-items-center">
+                        <div class="me-4 d-none d-md-block text-center">
+                            <div class="rounded-circle bg-light p-3">
+                                <i class="bi @(acc is CurrentAccount ? "bi-credit-card-2-front" : "bi-piggy-bank") fs-3 text-primary"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between">
+                                <h5 class="mb-1 fw-bold">@acc.Owner.FirstName @acc.Owner.LastName</h5>
+                                <span class="badge @(acc is CurrentAccount ? "bg-info-subtle text-info" : "bg-warning-subtle text-warning") rounded-pill">
+                                    @(acc is CurrentAccount ? "Compte Courant" : "Épargne")
+                                </span>
+                            </div>
+                            <p class="text-muted small mb-0">IBAN: <code>@acc.Number</code></p>
+                        </div>
+
+                        <div class="text-end ms-4" style="min-width: 150px;">
+                            <h4 class="mb-0 @(acc.Balance < 0 ? "balance-negative" : "balance-positive")">
+                                @acc.Balance.ToString("N2") €
+                            </h4>
+                            <div class="mt-2 btn-group shadow-sm">
+                                <button class="btn btn-sm btn-outline-success border-0" title="Déposer" @onclick="() => acc.Deposit(100)">
+                                    <i class="bi bi-plus-circle-fill"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger border-0" title="Retirer" @onclick="() => Withdraw(acc, 50)">
+                                    <i class="bi bi-dash-circle-fill"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-dark border-0" title="Appliquer Intérêts" @onclick="() => acc.ApplyInterest()">
+                                    <i class="bi bi-percent"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private string? error;
+    private string firstName = "";
+    private string lastName = "";
+    private string accountType = "Current";
+
+    private void HandleCreate()
+    {
+        try 
+        {
+            error = null;
+            if (string.IsNullOrWhiteSpace(firstName) || string.IsNullOrWhiteSpace(lastName))
+            {
+                error = "Informations client incomplètes.";
+                return;
+            }
+
+            var p = new Person(firstName, lastName, DateTime.Now.AddYears(-20));
+            var id = "BE" + new Random().Next(10, 99) + "-" + new Random().Next(1000, 9999) + "-" + new Random().Next(1000, 9999);
+            
+            Account newAcc = accountType == "Current" 
+                ? new CurrentAccount(id, p, 500, 200) // 500€ init, 200€ crédit
+                : new SavingsAccount(id, p, 1000); // 1000€ init
+
+            BankService.MyBank.AddAccount(newAcc);
+            
+            firstName = ""; lastName = "";
+        }
+        catch (Exception ex) { error = ex.Message; }
+    }
+
+    private void Withdraw(Account acc, double amount) 
+    {
+        try 
+        {
+            error = null;
+            acc.Withdraw(amount);
+        } 
+        catch (Exception ex) { error = ex.Message; }
+    }
+}
